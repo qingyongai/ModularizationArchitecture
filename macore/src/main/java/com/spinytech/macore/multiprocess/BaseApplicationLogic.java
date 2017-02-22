@@ -8,9 +8,10 @@ import com.spinytech.macore.MaApplication;
 /**
  * Created by wanglei on 2016/11/25.
  */
-
 public class BaseApplicationLogic {
+
     protected MaApplication mApplication;
+
     public BaseApplicationLogic() {
     }
 
@@ -32,4 +33,5 @@ public class BaseApplicationLogic {
 
     public void onConfigurationChanged(Configuration newConfig) {
     }
+
 }

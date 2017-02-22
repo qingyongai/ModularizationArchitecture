@@ -14,9 +14,10 @@ import com.spinytech.macore.tools.Logger;
 
 /**
  * Created by wanglei on 2016/11/29.
+ * update 2017-2-22 添加注释
  */
-
 public final class WideRouterConnectService extends Service {
+
     private static final String TAG = "WideRouterConnectService";
 
     @Override
@@ -67,9 +68,8 @@ public final class WideRouterConnectService extends Service {
 
         @Override
         public boolean checkResponseAsync(String domain, String routerRequest) throws RemoteException {
-            return
-                    WideRouter.getInstance(MaApplication.getMaApplication())
-                            .answerLocalAsync(domain, routerRequest);
+            return WideRouter.getInstance(MaApplication.getMaApplication())
+                    .answerLocalAsync(domain, routerRequest);
         }
 
         @Override

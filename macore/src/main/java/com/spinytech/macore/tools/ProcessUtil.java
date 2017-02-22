@@ -11,16 +11,27 @@ import java.util.List;
 
 /**
  * Created by wanglei on 2016/11/25.
+ * update 2017-2-22 添加注释
  */
-
 public class ProcessUtil {
 
     public static final String UNKNOWN_PROCESS_NAME = "unknown_process_name";
 
+    /**
+     * 获取当前进程的pid
+     *
+     * @return pid
+     */
     public static int getMyProcessId() {
         return android.os.Process.myPid();
     }
 
+    /**
+     * 获取对应pid对应的process
+     *
+     * @param pid 进程pid
+     * @return 进程名
+     */
     public static String getProcessName(int pid) {
         String processName = UNKNOWN_PROCESS_NAME;
         try {
@@ -39,9 +50,16 @@ public class ProcessUtil {
         return UNKNOWN_PROCESS_NAME;
     }
 
+    /**
+     * 获取对应pid对应的process
+     *
+     * @param context context
+     * @param pid     进程pid
+     * @return 进程名
+     */
     public static String getProcessName(Context context, int pid) {
         String processName = getProcessName(pid);
-        if(UNKNOWN_PROCESS_NAME.equals(processName)){
+        if (UNKNOWN_PROCESS_NAME.equals(processName)) {
             ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             List<ActivityManager.RunningAppProcessInfo> runningApps = am.getRunningAppProcesses();
             if (runningApps == null) {
@@ -52,7 +70,7 @@ public class ProcessUtil {
                     return procInfo.processName;
                 }
             }
-        }else{
+        } else {
             return processName;
         }
         return UNKNOWN_PROCESS_NAME;

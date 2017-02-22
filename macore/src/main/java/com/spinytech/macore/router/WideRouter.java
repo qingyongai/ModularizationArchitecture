@@ -23,20 +23,24 @@ import static android.content.Context.BIND_AUTO_CREATE;
 
 /**
  * Created by wanglei on 2016/11/29.
+ * update 2017-2-22 添加注释
  */
-
 public class WideRouter {
+
     private static final String TAG = "WideRouter";
+
     public static final String PROCESS_NAME = "com.spiny.ma.widerouter";
-    private static HashMap<String, ConnectServiceWrapper> sLocalRouterClasses;
     private static WideRouter sInstance = null;
     private MaApplication mApplication;
+    boolean mIsStopping = false;
+
+    private static HashMap<String, ConnectServiceWrapper> sLocalRouterClasses;
     private HashMap<String, ServiceConnection> mLocalRouterConnectionMap;
     private HashMap<String, ILocalRouterAIDL> mLocalRouterAIDLMap;
-    boolean mIsStopping = false;
 
     private WideRouter(MaApplication context) {
         mApplication = context;
+        // 只可以在WideRouterApplicationLogic里面去初始化它
         String checkProcessName = ProcessUtil.getProcessName(context, ProcessUtil.getMyProcessId());
         if (!PROCESS_NAME.equals(checkProcessName)) {
             throw new RuntimeException("You should not initialize the WideRouter in process:" + checkProcessName);
@@ -53,6 +57,12 @@ public class WideRouter {
         return sInstance;
     }
 
+    /**
+     * 把每个进程的LocalRouter注册进来
+     *
+     * @param processName 进程名
+     * @param targetClass LocalRouterConnectService
+     */
     public static void registerLocalRouter(String processName, Class<? extends LocalRouterConnectService> targetClass) {
         if (null == sLocalRouterClasses) {
             sLocalRouterClasses = new HashMap<>();
@@ -61,9 +71,15 @@ public class WideRouter {
         sLocalRouterClasses.put(processName, connectServiceWrapper);
     }
 
+    /**
+     * 对应进程的Router是否注册过
+     *
+     * @param domain 进程名
+     * @return true以及注册过
+     */
     boolean checkLocalRouterHasRegistered(final String domain) {
         ConnectServiceWrapper connectServiceWrapper = sLocalRouterClasses.get(domain);
-        if(null == connectServiceWrapper){
+        if (null == connectServiceWrapper) {
             return false;
         }
         Class<? extends LocalRouterConnectService> clazz = connectServiceWrapper.targetClass;
@@ -76,7 +92,7 @@ public class WideRouter {
 
     boolean connectLocalRouter(final String domain) {
         ConnectServiceWrapper connectServiceWrapper = sLocalRouterClasses.get(domain);
-        if(null == connectServiceWrapper){
+        if (null == connectServiceWrapper) {
             return false;
         }
         Class<? extends LocalRouterConnectService> clazz = connectServiceWrapper.targetClass;
@@ -174,7 +190,7 @@ public class WideRouter {
         ILocalRouterAIDL target = mLocalRouterAIDLMap.get(domain);
         if (target == null) {
             ConnectServiceWrapper connectServiceWrapper = sLocalRouterClasses.get(domain);
-            if(null == connectServiceWrapper){
+            if (null == connectServiceWrapper) {
                 return false;
             }
             Class<? extends LocalRouterConnectService> clazz = connectServiceWrapper.targetClass;
